@@ -10,7 +10,7 @@ const allMovies = path.join(process.cwd(), 'movies.json')
 const require = createRequire(import.meta.url)
 const movies = require('allMovies.json') */
 
-const movies = JSON.parse(await fs.readFile(allMovies))
+const movies = JSON.parse(await fs.readFile(allMovies, 'utf8'))
 
 const PORT = process.env.PORT ?? 1234
 const app = express()
@@ -25,7 +25,8 @@ app.use(cors({
   origin: (origin, callback) => {
     const ACCEPTED_ORIGINS = [
       'http://127.0.0.1:1234/movies',
-      'http://127.0.0.1:5500'
+      'http://127.0.0.1:5500',
+      'https://deploy-api-rest-taupe.vercel.app/'
     ]
 
     if (!origin) callback(null, true)
