@@ -4,7 +4,7 @@ import crypto from 'node:crypto'
 import cors from 'cors'
 import path from 'node:path'
 import { validateMovie, validateMoviePartial } from './schemas/movies.mjs'
-const allMovies = path.join(process.cwd(), 'config.json')
+const allMovies = path.join(process.cwd(), 'movies.json')
 
 /* import { createRequire } from 'node:module'
 const require = createRequire(import.meta.url)
