@@ -121,12 +121,8 @@ app.get('/movies/:id', async (req, res, next) => {
   res.status(404).send('{}')
 })
 
-app.get('/movies', (req, res, next) => {
-  res.status(200).send(movies)
-})
-
 app.use((req, res) => {
-  res.status(404).json({ error: 'Recurso no encontrado 1' })
+  res.status(404).json({ error: 'Recurso no encontrado 1', method: req.method, url: req.url })
 })
 
 const server = app.listen(PORT, () => {
