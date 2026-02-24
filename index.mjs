@@ -8,7 +8,7 @@ const allMovies = path.join(process.cwd(), 'config.json');
 
 /* import { createRequire } from 'node:module'
 const require = createRequire(import.meta.url)
-const movies = require('/movies.json') */
+const movies = require('./movies.json') */
 
 const movies = JSON.parse(await fs.readFile(allMovies))
 
@@ -53,7 +53,7 @@ app.get('/movies', async (req, res, next) => {
 
   if (!genre) return next()
 
-  const data = JSON.parse(await fs.readFile('/movies.json', 'utf8'))
+  const data = JSON.parse(await fs.readFile('./movies.json', 'utf8'))
 
   const selectedMovies = data.filter(mov => mov.genre.some(m => m.toLowerCase() === genre.toLowerCase()))
   if (selectedMovies) {
@@ -65,7 +65,7 @@ app.get('/movies', async (req, res, next) => {
 // GET principal
 
 app.get('/movies', async (req, res) => {
-  const movies = JSON.parse(await fs.readFile('/movies.json', 'utf8'))
+  const movies = JSON.parse(await fs.readFile('./movies.json', 'utf8'))
   res.status(200).json(movies)
 })
 
@@ -93,7 +93,7 @@ app.patch('/movies/:id', async (req, res) => {
     return res.status(400).json({ error: result.error.message })
   }
 
-  const movies = JSON.parse(await fs.readFile('/movies.json', 'utf8'))
+  const movies = JSON.parse(await fs.readFile('./movies.json', 'utf8'))
   const movieIndex = movies.findIndex(mov => mov.id === id)
 
   if (movieIndex === -1) return res.status(404).json({ error: 'Recurso no encotradooooo' })
@@ -112,7 +112,7 @@ app.get('/movies/:id', async (req, res, next) => {
     res.status(404).send('{}')
     next()
   }
-  const data = JSON.parse(await fs.readFile('/movies.json'))
+  const data = JSON.parse(await fs.readFile('./movies.json'))
   const pelicula = data.find(movie => movie.id === id)
   if (pelicula) {
     return res.status(200).json(pelicula)
