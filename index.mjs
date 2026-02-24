@@ -26,7 +26,7 @@ app.use(cors({
     const ACCEPTED_ORIGINS = [
       'http://127.0.0.1:1234/movies',
       'http://127.0.0.1:5500',
-      'https://deploy-api-rest-taupe.vercel.app/'
+      'https://deploy-api-rest-taupe.vercel.app'
     ]
 
     if (!origin) callback(null, true)
