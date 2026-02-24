@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+  <h1>HOLA COMO ESTAMOS</h1>
+    <script>
+      let movies = []
+      async function obtenerPeliculas(){
+        document.addEventListener('click' ,e => {
+          if (e.target.matches('button')){
+           const article = e.target.closest('article')
+           const id = article.dataset.id
+
+           fetch(`http://localhost:1234/movies/${id}`,{ method:'DELETE'}).then(res => res.json()).then(data => {article.remove()})
+            
+
+          }
+        })
+        try{
+          const response = await fetch('http://localhost:1234/movies')
+            //Se comprueba si la request fue exitosa
+          if(!response.ok)
+            return console.log(`Hubo un problema al recuperar el recurso ${response.status}`)
+            //Si fue exitosa se extrae la informacion del body como json
+            const data = await response.json()
+            movies = data
+            console.log(data)
+          }catch (err){
+            //Si existe un error de red hacemos que el catch controle el error y devuelva un mensaje informativo
+              console.log('Se produjo un error de red', err)
+            }
+
+          movies.forEach(movie => {
+            let publication = `
+            <article data-id=${movie.id}>
+                <h1>${movie.title}</h1>
+                <img src='${movie.poster}'>
+                <p>${movie.director}</p>
+                <button>ELIMINAR</button>
+            </article>
+            `
+            document.body.innerHTML += publication
+          })
+        }
+
+        //Una ves se obtienen los datos de las peliculas se crean las visualizaciones
+        obtenerPeliculas()
+    </script>
+</body>
+<script src="app.js"></script>
+</html>
