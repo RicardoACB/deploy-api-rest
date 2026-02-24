@@ -122,7 +122,7 @@ app.get('/movies/:id', async (req, res, next) => {
 })
 
 app.get('/movies', (req, res, next) => {
-
+  res.status(200).send(movies)
 })
 
 app.options('/movies/:id', (req, res) => {
