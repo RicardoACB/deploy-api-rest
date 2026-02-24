@@ -2,13 +2,15 @@ import express from 'express'
 import fs from 'node:fs/promises'
 import crypto from 'node:crypto'
 import cors from 'cors'
+import path from 'node:path'
 import { validateMovie, validateMoviePartial } from './schemas/movies.mjs'
+const allMovies = path.join(process.cwd(), 'config.json');
 
 /* import { createRequire } from 'node:module'
 const require = createRequire(import.meta.url)
 const movies = require('/movies.json') */
 
-const movies = JSON.parse(await fs.readFile('/movies.json'))
+const movies = JSON.parse(await fs.readFile('allMovies'))
 
 const PORT = process.env.PORT ?? 1234
 const app = express()
@@ -62,7 +64,7 @@ app.get('/movies', async (req, res, next) => {
 
 // GET principal
 
-app.get('/movies', async (req, res) => {
+app.get(allMovies, async (req, res) => {
   const movies = JSON.parse(await fs.readFile('/movies.json', 'utf8'))
   res.status(200).json(movies)
 })
