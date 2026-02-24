@@ -10,7 +10,7 @@ const allMovies = path.join(process.cwd(), 'config.json');
 const require = createRequire(import.meta.url)
 const movies = require('/movies.json') */
 
-const movies = JSON.parse(await fs.readFile('allMovies'))
+const movies = JSON.parse(await fs.readFile(allMovies))
 
 const PORT = process.env.PORT ?? 1234
 const app = express()
@@ -64,7 +64,7 @@ app.get('/movies', async (req, res, next) => {
 
 // GET principal
 
-app.get(allMovies, async (req, res) => {
+app.get('/movies', async (req, res) => {
   const movies = JSON.parse(await fs.readFile('/movies.json', 'utf8'))
   res.status(200).json(movies)
 })
