@@ -24,17 +24,17 @@ app.use(express.json())
 app.use(cors({
   origin: (origin, callback) => {
     const ACCEPTED_ORIGINS = [
-      'http://127.0.0.1:1234/movies',
+      'http://127.0.0.1:1234',
       'http://127.0.0.1:5500',
       'https://deploy-api-rest-taupe.vercel.app'
     ]
 
-    if (!origin) callback(null, true)
+    if (!origin) return callback(null, true)
     if (ACCEPTED_ORIGINS.includes(origin)) return callback(null, true)
 
     return callback(new Error('Hubo un error de CORS'))
   },
-  methods: ['DELETE'],
+  methods: ['DELETE', 'GET', 'PATCH', 'POST'],
   allowedHeaders: ['Content-Type']
 }))
 
@@ -54,7 +54,7 @@ app.get('/movies', async (req, res, next) => {
 
   if (!genre) return next()
 
-  const data = JSON.parse(await fs.readFile('allMovies.json', 'utf8'))
+  const data = JSON.parse(await fs.readFile(allMovies, 'utf8'))
 
   const selectedMovies = data.filter(mov => mov.genre.some(m => m.toLowerCase() === genre.toLowerCase()))
   if (selectedMovies) {
@@ -66,7 +66,7 @@ app.get('/movies', async (req, res, next) => {
 // GET principal
 
 app.get('/movies', async (req, res) => {
-  const movies = JSON.parse(await fs.readFile('allMovies.json', 'utf8'))
+  const movies = JSON.parse(await fs.readFile(allMovies, 'utf8'))
   res.status(200).json(movies)
 })
 
@@ -94,7 +94,7 @@ app.patch('/movies/:id', async (req, res) => {
     return res.status(400).json({ error: result.error.message })
   }
 
-  const movies = JSON.parse(await fs.readFile('allMovies.json', 'utf8'))
+  const movies = JSON.parse(await fs.readFile(allMovies, 'utf8'))
   const movieIndex = movies.findIndex(mov => mov.id === id)
 
   if (movieIndex === -1) return res.status(404).json({ error: 'Recurso no encotradooooo' })
@@ -113,7 +113,7 @@ app.get('/movies/:id', async (req, res, next) => {
     res.status(404).send('{}')
     next()
   }
-  const data = JSON.parse(await fs.readFile('allMovies.json'))
+  const data = JSON.parse(await fs.readFile(allMovies, 'utf8'))
   const pelicula = data.find(movie => movie.id === id)
   if (pelicula) {
     return res.status(200).json(pelicula)
@@ -123,11 +123,6 @@ app.get('/movies/:id', async (req, res, next) => {
 
 app.get('/movies', (req, res, next) => {
   res.status(200).send(movies)
-})
-
-app.options('/movies/:id', (req, res) => {
-  res.header('Access-Control-Allow-Methods', 'DELETE')
-  res.status(200).send('Se permite')
 })
 
 app.use((req, res) => {
